@@ -1,0 +1,267 @@
+<template name="defectList">
+    <div class="row">
+        <a class="btn btn-success addDefectBtn" href="#addDefectModal" data-toggle="modal" role="button">添加</a>
+    </div>
+
+    <div class="row">
+        <div class="table-hover table-condensed reactive-table">
+            {{> reactiveTable settings=settings}}
+        </div>
+    </div>
+
+    <div class="modal fade" id="addDefectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>添加缺陷报告</h3>
+                </div>
+                <div class="modal-body" >
+                    <form role="form">
+                        <label class="control-label">所属需求</label>
+                        <select class="form-control" id="bugrelatedfeature" placeholder="必填项">
+                            {{#each features}}
+                            <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                        <label class="control-label">主题</label>
+                        <textarea id="topic" class="form-control" type="text" placeholder="必填项" rows="1"></textarea>
+                        <label class="control-label">前置条件</label>
+                        <textarea id="bugprecondition" class="form-control" type="text" rows="1"></textarea>
+                        <label class="control-label">重现步骤</label>
+                        <textarea id="bugsteps" class="form-control" type="text" rows="6" placeholder="必填项"></textarea>
+                        <label class="control-label">期望结果</label>
+                        <textarea id="bugexpectedrespond" class="form-control" type="text" rows="2" placeholder="必填项"></textarea>
+                        <label class="control-label">实际结果</label>
+                        <textarea id="actualrespond" class="form-control" type="text" rows="2" placeholder="必填项"></textarea>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label class="control-label">严重程度</label>
+                                <select class="form-control" id="severity" placeholder="必填项">
+                                    <option value="致命">致命</option>
+                                    <option value="严重">严重</option>
+                                    <option value="较重">较重</option>
+                                    <option value="一般">一般</option>
+                                    <option value="建议类">建议类</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">优先级</label>
+                                <select class="form-control" id="priority" placeholder="必填项">
+                                    <option value="P0">P1</option>
+                                    <option value="P0">P0</option>
+                                    <option value="P0">P2</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">分配给</label>
+                                <select class="form-control" id="assignto" placeholder="必填项">
+                                    {{#each allUsers}}
+                                    <option value="{{_id}}">{{username}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+                        {{> screenshot_create}}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a href="" class="btn btn-success addDefectButton">添加</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="defectEdit">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label">所属需求</label>
+            <select class="form-control" id="editrelatedfeature"  rows="1">
+                <option value="{{selectedDefect.feature.value}}" selected="true" disabled="true">{{selectedDefect.feature.text}}</option>
+                {{#each features}}
+                <option value="{{_id}}">{{name}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">主题</label>
+            <textarea id="edittopic" class="form-control" type="text" placeholder="必填项" rows="1">{{selectedDefect.topic}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">前置条件</label>
+            <textarea id="editprecondition" class="form-control" type="text" rows="1">{{selectedDefect.precondition}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">重现步骤</label>
+            <textarea id="editsteps" class="form-control" type="text" rows="6" placeholder="必填项">{{selectedDefect.steps}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">期望结果</label>
+            <textarea id="editexpectedrespond" class="form-control" type="text" rows="2" placeholder="必填项">{{selectedDefect.expectedRespond}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">实际结果</label>
+            <textarea id="editactualrespond" class="form-control" type="text" rows="2" placeholder="必填项">{{selectedDefect.actualRespond}}</textarea>
+        </div>
+        <div class="form-group">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label class="control-label">严重程度</label>
+                    <select class="form-control" id="editseverity" placeholder="必填项">
+                        <option value="{{selectedDefect.severity}}" selected="true" disabled="true">{{selectedDefect.severity}}</option>
+                        <option value="致命">致命</option>
+                        <option value="严重">严重</option>
+                        <option value="较重">较重</option>
+                        <option value="一般">一般</option>
+                        <option value="建议类">建议类</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">优先级</label>
+                    <select class="form-control" id="editpriority" placeholder="必填项">
+                        <option value="{{selectedDefect.priority}}" selected="true" disabled="true">{{selectedDefect.priority}}</option>
+                        <option value="P0">P0</option>
+                        <option value="P0">P1</option>
+                        <option value="P0">P2</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">分配给</label>
+                    <select class="form-control" id="editassignto" placeholder="必填项">
+                        <option value="{{selectedDefect.assignTo.value}}" selected="true" disabled="true">{{selectedDefect.assignTo.text}}</option>
+                        {{#each allUsers}}
+                        <option value="{{_id}}">{{username}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+        </div>
+        {{> screenshot_update}}
+    </form>
+    <a href="" class="btn btn-success updateDefectButton">修改</a>
+</template>
+
+<template name="screenshot_create">
+    <div class="form-inline">
+        <div class="form-group"><input class="form-control" type="file" id="fileInput"></div>
+        <div class="form-group"><a class="btn btn-primary upload">上传截图</a></div>
+        <span>文件必须小于2M</span>
+    </div>
+    <div class="imageView">
+        {{#each images}}
+        <div>
+            <a href="{{this.url}}" target="_blank"><img class="previewPicture" src="{{this.url store='images'}}" alt="" /></a>
+            <a class="deleteImage btn btn-warning">删除</a>
+        </div>
+        {{/each}}
+    </div>
+</template>
+
+<template name="screenshot_update">
+    <div class="form-inline">
+        <div class="form-group"><input class="form-control" type="file" id="fileInput"></div>
+        <div class="form-group"><a class="btn btn-primary upload">上传截图</a></div>
+        <span>文件必须小于2M</span>
+    </div>
+    <div class="imageView">
+        {{#each images}}
+        <div>
+            <a href="{{this.url}}" target="_blank"><img class="previewPicture" src="{{this.url store='images'}}" alt="" /></a>
+            <a class="deleteImage btn btn-warning">删除</a>
+        </div>
+        {{/each}}
+    </div>
+</template>
+
+<template name="defectProcess">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label">主题</label>
+            <textarea rows="1" class="form-control noBolder" disabled="true">{{selectedDefect.topic}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">所属需求</label>
+            <p class="form-control noBolder">{{selectedDefect.feature.text}}</p>
+        </div>
+        <div class="form-group">
+            <label class="control-label">前置条件</label>
+            <textarea rows="1" class="form-control noBolder" disabled="true">{{selectedDefect.precondition}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">重现步骤</label>
+            <textarea rows="6" class="form-control noBolder" disabled="true">{{selectedDefect.steps}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">期望结果</label>
+            <textarea rows="2" class="form-control noBolder" disabled="true">{{selectedDefect.expectedRespond}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">实际结果</label>
+            <textarea rows="2" class="form-control noBolder" disabled="true">{{selectedDefect.actualRespond}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">严重程度</label>
+            <p class="form-control noBolder">{{selectedDefect.severity}}</p>
+        </div>
+        <div class="form-group">
+            <label class="control-label">优先级</label>
+            <p class="form-control noBolder">{{selectedDefect.priority}}</p>
+        </div>
+        <div class="imageView">
+            {{#each images}}
+            <label class="control-label">截图</label>
+            <div>
+                <a href="{{this.url}}" target="_blank"><img class="previewPicture" src="{{this.url store='images'}}" alt="" /></a>
+            </div>
+            {{/each}}
+        </div>
+    </form>
+
+    <form class="form-horizontal">
+        <div class="form-inline">
+            <div class="form-group">
+                <label class="control-label">状态</label>
+                <select class="form-control" id="selectstatus" placeholder="必填项">
+                    <option value="{{selectedDefect.status}}" selected="true">{{selectedDefect.status}}</option>
+                    <option value="已修复待验证">已修复待验证</option>
+                    <option value="验证通过并关闭">验证通过并关闭</option>
+                    <option value="验证不通过打回">验证不通过打回</option>
+                    <option value="不是缺陷并关闭">不是缺陷并关闭</option>
+                    <option value="重复缺陷并关闭">重复缺陷并关闭</option>
+                    <option value="延期处理并关闭">延期处理并关闭</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">分配给</label>
+                <select class="form-control" id="processassignto" placeholder="必填项">
+                    <option value="{{selectedDefect.assignTo.value}}" selected="true" disabled="true">{{selectedDefect.assignTo.text}}</option>
+                    {{#each allUsers}}
+                    <option value="{{_id}}">{{username}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">评论：</label>
+            <textarea class="form-control" rows="3" id="defectcomment"></textarea>
+        </div>
+        <div class="form-group">
+            <a class="btn btn-success processDefectBtn" role="button">处理</a>
+        </div>
+    </form>
+    <hr style="filter:alpha(opacity=100,finishopacity=0,style=1);width:auto;background-color:#bce8f1;height:3px" />
+    <h3>操作记录：</h3>
+    <ul>
+        {{#each comments}}
+        <li class="divider">
+            <div>
+                <h4>{{creator}}</h4>
+                <h5>{{createdAt}}</h5>
+                <p>{{content}}</p>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+</template>
+

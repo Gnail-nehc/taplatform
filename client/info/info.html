@@ -1,0 +1,19 @@
+<template name="info">
+    <div class="row">
+        <div class="col-md-6">
+            {{> highchartsHelper chartId="feature" chartWidth="100%" charHeight="100%" chartObject=featurePieChart}}
+        </div>
+        <div class="col-md-6">
+            {{> highchartsHelper chartId="caseReview" chartWidth="100%" charHeight="100%" chartObject=caseReviewPieChart}}
+        </div>
+        <div class="col-md-6">
+            {{> highchartsHelper chartId="caseTest" chartWidth="100%" charHeight="100%" chartObject=caseTestPieChart}}
+        </div>
+        <div class="col-md-6">
+            {{> highchartsHelper chartId="defectStatus" chartWidth="100%" charHeight="100%" chartObject=defectStatusPieChart}}
+        </div>
+        <div class="col-md-6">
+            {{> highchartsHelper chartId="defectPriority" chartWidth="100%" charHeight="100%" chartObject=defectPriorityPieChart}}
+        </div>
+    </div>
+</template>

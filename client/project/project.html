@@ -1,0 +1,79 @@
+<template name="project">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">电影云质量保证平台</a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a id="summary" href="/">项目概览 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="sumCategory" href="/summary/quality">质量总览</a></li>
+                        <li><a class="sumCategory" href="/summary/defecttodo"> 待处理缺陷人员</a></li>
+                        <li><a class="sumCategory" href="/summary/defecttrend">每日缺陷实时统计</a></li>
+                        <!--<li><a class="sumCategory" href="/summary/testtrend">测试进度实时统计</a></li>-->
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a id="myspace" href="/me">我的 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="myCategory" href="/me/defectassigned">分配给我的缺陷</a></li>
+                        <li><a class="myCategory" href="/me/defectcreated">我上报的缺陷</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {{> loginButtons}} <!-- here -->
+            </ul>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="title"><a href="{{projectPath}}">{{projectName}} <span class="sr-only">(current)</span></a></li>
+                    <li><a class="fa fa-file-text category" href="{{projectPath}}/feature"> 测试需求</a></li>
+                    <li><a class="fa fa-list-alt category" href="{{projectPath}}/case"> 测试用例</a></li>
+                    <li><a class="fa fa-bug category" href="{{projectPath}}/defect"> 缺陷管理</a></li>
+                    <li><a class="fa fa-bar-chart category" href="{{projectPath}}/metrics"> 质量度量</a></li>
+                    <li><a class="fa fa-exclamation-triangle category" href="{{projectPath}}/risk"> 风险分析</a></li>
+                    <!--<li><a class="fa fa-list-ol category" href="{{projectPath}}/access"> 发布准入清单</a></li>-->
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <h4 class="page-header">{{header}}</h4>
+                {{> yield "info"}}
+                {{> yield "featureList"}}
+                {{> yield "featureEdit"}}
+                {{> yield "caseList"}}
+                {{> yield "caseEdit"}}
+                {{> yield "caseReview"}}
+                {{> yield "caseTest"}}
+                {{> yield "defectList"}}
+                {{> yield "defectEdit"}}
+                {{> yield "defectProcess"}}
+                {{> yield "metrics"}}
+                <!--{{> yield "risk"}}-->
+            </div>
+        </div>
+    </div>
+    {{> sAlert}}
+    <div class="navbar navbar-default navbar-fixed-bottom">
+        <div class="navbar-inner navbar-content-center footercontent">
+            <div class="container">
+                <a href="mailto:cl100245@alibaba-inc.com">联系作者</a>
+                <span style="color: #777777">Copyright &copy; 2015 阿里影业 All Rights Reserved. Powered by MeteorJS</span>
+            </div>
+        </div>
+    </div>
+
+</template>

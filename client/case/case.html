@@ -1,0 +1,174 @@
+<template name="caseList">
+    <div class="row">
+        <a class="btn btn-success addCaseBtn" href="#addCaseModal" data-toggle="modal" role="button">添加</a>
+    </div>
+
+    <div class="row">
+        <div class="table-hover table-condensed reactive-table">
+            {{> reactiveTable settings=settings}}
+        </div>
+    </div>
+
+    <div class="modal fade" id="addCaseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>添加测试用例</h3>
+                </div>
+                <div class="modal-body" >
+                    <form role="form">
+                        <label class="control-label">所属需求</label>
+                        <select class="form-control" id="relatedfeature" placeholder="必填项">
+                            {{#each features}}
+                            <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                        <label class="control-label">标题</label>
+                        <textarea id="casename" class="form-control" type="text" placeholder="必填项" rows="1"></textarea>
+                        <label class="control-label">前置条件</label>
+                        <textarea id="precondition" class="form-control" type="text" rows="1"></textarea>
+                        <label class="control-label">测试步骤</label>
+                        <textarea id="steps" class="form-control" type="text" rows="6" placeholder="必填项"></textarea>
+                        <label class="control-label">验证点</label>
+                        <textarea id="expectedrespond" class="form-control" type="text" rows="6" placeholder="必填项"></textarea>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a href="/" class="btn btn-success addCaseButton">添加</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="caseEdit">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label">所属需求</label>
+            <select class="form-control" id="editrelatedfeature"  rows="1">
+                <option value="{{selectedCase.feature.value}}" selected="true" disabled="true">{{selectedCase.feature.text}}</option>
+                {{#each features}}
+                <option value="{{_id}}">{{name}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">用例标题</label>
+            <textarea class="form-control" id="caseeditname"  rows="1">{{selectedCase.name}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">前置条件</label>
+            <textarea class="form-control" id="editprecondition"  rows="2">{{selectedCase.precondition}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">测试步骤</label>
+            <textarea class="form-control" id="editsteps"  rows="6">{{selectedCase.steps}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">验证点</label>
+            <textarea class="form-control" id="editexpectedrespond" rows="6">{{selectedCase.expectedRespond}}</textarea>
+        </div>
+        <div class="row">
+            <a class="btn btn-success updateCaseBtn" role="button">更新</a>
+        </div>
+    </form>
+</template>
+
+<template name="caseReadOnly">
+    <form class="form-horizontal">
+        <label class="sr-only creatorLabel">{{selectedCase.creator}}</label>
+        <div class="form-group">
+            <label class="control-label">所属需求</label>
+            <p class="form-control noBolder">{{selectedCase.feature.text}}</p>
+        </div>
+        <div class="form-group">
+            <label class="control-label">用例标题</label>
+            <textarea class="form-control noBolder" rows="1" disabled="true">{{selectedCase.name}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">前置条件</label>
+            <textarea class="form-control noBolder" rows="2" disabled="true">{{selectedCase.precondition}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">测试步骤</label>
+            <textarea class="form-control noBolder" rows="4" disabled="true">{{selectedCase.steps}}</textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">验证点</label>
+            <textarea class="form-control noBolder" rows="4" disabled="true">{{selectedCase.expectedRespond}}</textarea>
+        </div>
+    </form>
+</template>
+
+<template name="caseReview">
+    {{> caseReadOnly}}
+
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label">设置评审结果：</label>
+            <select class="form-control" id="setReviewResult"  rows="1">
+                <option value="{{selectedCase.reviewResult}}" selected="true" disabled="true">{{selectedCase.reviewResult}}</option>
+                <option value="通过">通过</option>
+                <option value="不通过">不通过</option>
+                <option value="重审">重审</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">评论：</label>
+            <textarea class="form-control" rows="3" id="reviewcomment"></textarea>
+        </div>
+        <div class="form-group">
+            <a class="btn btn-success reviewCaseBtn" role="button">评审</a>
+        </div>
+    </form>
+    <hr style="filter:alpha(opacity=100,finishopacity=0,style=1);width:auto;background-color:#bce8f1;height:3px" />
+    <h3>评论记录：</h3>
+    <ul>
+        {{#each comments}}
+        <li class="divider">
+            <div>
+                <h4>{{creator}}</h4>
+                <h5>{{createdAt}}</h5>
+                <p>{{content}}</p>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+</template>
+
+
+<template name="caseTest">
+    {{> caseReadOnly}}
+
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label">执行结果：</label>
+            <select class="form-control" id="setTestResult"  rows="1">
+                <option value="{{selectedCase.testResult}}" selected="true" disabled="true">{{selectedCase.testResult}}</option>
+                <option value="成功">成功</option>
+                <option value="失败">失败</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">说明：</label>
+            <textarea class="form-control reviewCaseContent" rows="3" id="testcomment"></textarea>
+        </div>
+        <div class="form-group">
+            <a class="btn btn-success caseTestBtn" role="button">执行</a>
+        </div>
+    </form>
+    <hr style="filter:alpha(opacity=100,finishopacity=0,style=1);width:auto;background-color:#bce8f1;height:3px" />
+    <h3>测试记录：</h3>
+    <ul>
+        {{#each comments}}
+        <li class="divider">
+            <div>
+                <h4>{{creator}}</h4>
+                <h5>{{createdAt}}</h5>
+                <p>{{content}}</p>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+</template>

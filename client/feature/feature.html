@@ -1,0 +1,78 @@
+<template name="featureList">
+    <div class="row">
+        <a class="btn btn-success addFeatureBtn" href="#addFeatureModal" data-toggle="modal" role="button">添加</a>
+    </div>
+    <div class="row">
+        <div class="table-hover table-condensed reactive-table">
+            {{> reactiveTable settings=settings}}
+        </div>
+    </div>
+
+    <div class="modal fade" id="addFeatureModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3>添加测试需求</h3>
+                </div>
+                <div class="modal-body" >
+                    <form role="form">
+                        <label class="control-label">需求简述</label>
+                        <textarea id="featurename" class="form-control" name="featurename" type="text" placeholder="必填项" rows="3"></textarea>
+                        <label class="control-label">出错频率</label>
+                        <select class="form-control" id="fof" name="fof">
+                            <option value="" selected="true" disabled="true">必填项</option>
+                            <option value="1.00">常见</option>
+                            <option value="0.75">偶尔</option>
+                            <option value="0.50">少见</option>
+                            <option value="0.25">罕见</option>
+                        </select>
+                        <label class="control-label">影响程度</label>
+                        <select class="form-control" id="impact" placeholder="必填项" name="impact">
+                            <option value="" selected="true" disabled="true">必填项</option>
+                            <option value="1.00">最大</option>
+                            <option value="0.75">较大</option>
+                            <option value="0.50">一些</option>
+                            <option value="0.25">最小</option>
+                        </select>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a href="/" class="btn btn-success addFeaBtn">添加</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template name="featureEdit">
+    <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label">需求简述</label>
+                <textarea class="form-control" id="featureeditname">{{selectedFeature.name}}</textarea>
+            </div>
+            <div class="form-group">
+                <label class="control-label">出错频率</label>
+                <select class="form-control" id="bindFof">
+                    <option value="{{selectedFeature.frequencyOfFailure.value}}" selected="true" disabled="true">{{selectedFeature.frequencyOfFailure.text}}</option>
+                    <option value="1.00">常见</option>
+                    <option value="0.75">偶尔</option>
+                    <option value="0.50">少见</option>
+                    <option value="0.25">罕见</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">影响程度</label>
+                <select class="form-control" id="bindImpact">
+                    <option value="{{selectedFeature.impact.value}}" selected="true" disabled="true">{{selectedFeature.impact.text}}</option>
+                    <option value="1.00">最大</option>
+                    <option value="0.75">较大</option>
+                    <option value="0.50">一些</option>
+                    <option value="0.25">最小</option>
+                </select>
+            </div>
+            <div class="row">
+                <a class="btn btn-success updateFeatureBtn" role="button">更新</a>
+            </div>
+    </form>
+</template>
